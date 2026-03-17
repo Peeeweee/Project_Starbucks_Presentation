@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%2300a862'/><path d='M30 40h40v30c0 10-8 15-20 15s-20-5-20-15V40zM70 45h5c5 0 5 10 0 10h-5V45z' fill='white'/></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Starbucks-Viz | One Cup. 100,000 Stories.</title>
+    <meta name="description" content="A scroll-based data presentation revealing customer insights from 100,000 Starbucks orders. Built with React and Framer Motion." />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Starbucks-Viz | One Cup. 100,000 Stories." />
+    <meta property="og:description" content="A scroll-based data storytelling presentation for CSDS 327." />
+    <meta property="og:type" content="website" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+      body {
+        background-color: #0a0a0a;
+        margin: 0;
+        overflow-x: hidden;
+      }
+      /* Smooth scroll for anchor links */
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

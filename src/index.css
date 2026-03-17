@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Inter:wght@400;500;700;900&display=swap');
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0d0d0d;
+  color: #f5f0e8;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Texture/Noise overlay */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.font-display {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-body {
+  font-family: 'Inter', sans-serif;
+}
+
+@layer utilities {
+  .text-gold {
+    color: #c8a96e;
+  }
+  .text-brightGreen {
+    color: #00a862;
+  }
+  .text-darkGreen {
+    color: #1e3932;
+  }
+  .text-offWhite {
+    color: #f5f0e8;
+  }
+  .text-muted {
+    color: #888888;
+  }
+  .bg-gold {
+    background-color: #c8a96e;
+  }
+  .bg-brightGreen {
+    background-color: #00a862;
+  }
+  .bg-darkGreen {
+    background-color: #1e3932;
+  }
+  .bg-bg {
+    background-color: #0d0d0d;
+  }
+}
+
+.story-section {
+  position: relative;
+  z-index: 10;
+}
