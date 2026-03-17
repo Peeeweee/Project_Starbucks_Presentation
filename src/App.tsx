@@ -42,44 +42,44 @@ const LAYOUT_CONFIGS: Record<number, {
   bg: string;
 }> = {
   0: { // Opening - Center
-    cup: { x: '0%', y: '-22%', scale: 0.5, opacity: 1, rotate: 0 },
+    cup: { x: '0%', y: '-26%', scale: 0.45, opacity: 1, rotate: 0 },
     content: { x: '0', y: '16vh', width: '90%', textAlign: 'center', justifyContent: 'center' },
     bg: 'radial-gradient(circle at 50% 50%, #1a1a1a 0%, #080808 100%)'
   },
   1: { // Problem - Left
-    cup: { x: '28%', y: '0%', scale: 0.8, opacity: 1, rotate: 0 },
-    content: { x: '0', y: '0', width: '45%', textAlign: 'left', justifyContent: 'flex-start' },
+    cup: { x: '25%', y: '0%', scale: 0.72, opacity: 1, rotate: 0 },
+    content: { x: '0', y: '0', width: '50%', textAlign: 'left', justifyContent: 'flex-start' },
     bg: 'linear-gradient(135deg, #0d0d0d 0%, #151515 100%)'
   },
   2: { // Demographics - Right
-    cup: { x: '-28%', y: '0%', scale: 0.78, opacity: 1, rotate: -3 },
-    content: { x: '0', y: '0', width: '45%', textAlign: 'right', justifyContent: 'flex-end' },
+    cup: { x: '-25%', y: '0%', scale: 0.72, opacity: 1, rotate: -3 },
+    content: { x: '0', y: '0', width: '50%', textAlign: 'right', justifyContent: 'flex-end' },
     bg: 'linear-gradient(225deg, #0d1210 0%, #0d0d0d 100%)'
   },
   3: { // Behavioral - Left
-    cup: { x: '28%', y: '0%', scale: 0.78, opacity: 1, rotate: 2 },
-    content: { x: '0', y: '0', width: '45%', textAlign: 'left', justifyContent: 'flex-start' },
+    cup: { x: '25%', y: '0%', scale: 0.72, opacity: 1, rotate: 2 },
+    content: { x: '0', y: '0', width: '50%', textAlign: 'left', justifyContent: 'flex-start' },
     bg: 'radial-gradient(circle at 50% 80%, #162620 0%, #080808 100%)'
   },
   4: { // Ordering - Right
-    cup: { x: '-28%', y: '0%', scale: 0.8, opacity: 1, rotate: 4 },
-    content: { x: '0', y: '0', width: '45%', textAlign: 'right', justifyContent: 'flex-end' },
+    cup: { x: '-25%', y: '0%', scale: 0.72, opacity: 1, rotate: 4 },
+    content: { x: '0', y: '0', width: '50%', textAlign: 'right', justifyContent: 'flex-end' },
     bg: 'linear-gradient(135deg, #0d0d0d 0%, #121815 100%)'
   },
   5: { // Insights - Left
-    cup: { x: '28%', y: '0%', scale: 0.76, opacity: 1, rotate: -2 },
-    content: { x: '0', y: '0', width: '45%', textAlign: 'left', justifyContent: 'flex-start' },
+    cup: { x: '25%', y: '0%', scale: 0.70, opacity: 1, rotate: -2 },
+    content: { x: '0', y: '0', width: '50%', textAlign: 'left', justifyContent: 'flex-start' },
     bg: 'linear-gradient(225deg, #121212 0%, #0d0d0d 100%)'
   },
-  6: { // Recommendations - Center
-    cup: { x: '0%', y: '-22%', scale: 0.45, opacity: 1, rotate: 0 },
-    content: { x: '0', y: '20vh', width: '85%', textAlign: 'center', justifyContent: 'center' },
-    bg: 'radial-gradient(circle at 50% 20%, #1e3932 0%, #080808 100%)'
+  6: { // Recommendations - Unique Grid Layout
+    cup: { x: '26%', y: '0%', scale: 0.70, opacity: 1, rotate: 4 },
+    content: { x: '0', y: '0', width: '55%', textAlign: 'left', justifyContent: 'flex-start' },
+    bg: 'radial-gradient(circle at 75% 50%, #1e3932 0%, #0a0f0d 100%)'
   },
-  7: { // Closing - Center
-    cup: { x: '0%', y: '-18%', scale: 0.5, opacity: 1, rotate: 0 },
-    content: { x: '0', y: '16vh', width: '100%', textAlign: 'center', justifyContent: 'center' },
-    bg: 'radial-gradient(circle at 50% 50%, #201a10 0%, #080808 100%)'
+  7: { // Closing - Cinematic Typist Stage
+    cup: { x: '35%', y: '5%', scale: 1.1, opacity: 0.15, rotate: -8 },
+    content: { x: '0', y: '0', width: '75%', textAlign: 'left', justifyContent: 'flex-start' },
+    bg: 'radial-gradient(circle at 80% 50%, #151005 0%, #050505 100%)'
   }
 };
 

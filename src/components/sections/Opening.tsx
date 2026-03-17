@@ -70,8 +70,8 @@ export const Opening = ({ index }: { index: number }) => {
         className="sub"
         style={{
           color: '#666',
-          fontSize: 'clamp(14px, 1.4vw, 20px)',
-          maxWidth: 520,
+          fontSize: 'clamp(18px, 2vw, 28px)',
+          maxWidth: 600,
           lineHeight: 1.7,
           margin: '0 0 40px',
         }}
@@ -79,7 +79,7 @@ export const Opening = ({ index }: { index: number }) => {
         A data story about what drives <span style={{ color: '#00a862', fontWeight: 800 }}>Starbucks</span> customers — and what the numbers reveal.
       </motion.p>
       <motion.div initial={{ opacity: 0 }} className="cta" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-        <span style={{ fontSize: 10, letterSpacing: '0.35em', color: '#444', fontWeight: 700, textTransform: 'uppercase' }}>
+        <span style={{ fontSize: 13, letterSpacing: '0.35em', color: '#444', fontWeight: 700, textTransform: 'uppercase' }}>
           Arrow keys or scroll to navigate
         </span>
         <motion.div
