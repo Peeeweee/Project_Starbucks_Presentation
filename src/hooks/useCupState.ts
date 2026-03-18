@@ -4,7 +4,33 @@ import type { CupState } from '../components/Cup/cup.types';
 import { useSection } from '../context/SectionContext';
 
 const SECTION_CUP_STATES: Record<number, CupState> = {
-  0: { // Opening
+  0: { // Blank Intro
+    fillLevel: 0,
+    isSteaming: false,
+    isWriting: false,
+    writeText: '',
+    crackLevel: 0,
+    isHealing: false,
+    isOverflowing: false,
+    isGlowing: false,
+    glowColor: '#00a862',
+    tilt: 0,
+    isShaking: false
+  },
+  1: { // Sunrise Intro
+    fillLevel: 0,
+    isSteaming: true,
+    isWriting: false,
+    writeText: '',
+    crackLevel: 0,
+    isHealing: false,
+    isOverflowing: false,
+    isGlowing: true,
+    glowColor: '#9d4edd',
+    tilt: 0,
+    isShaking: false
+  },
+  2: { // Opening
     fillLevel: 0,
     isSteaming: false,
     isWriting: false,
@@ -17,7 +43,7 @@ const SECTION_CUP_STATES: Record<number, CupState> = {
     tilt: 0,
     isShaking: false
   },
-  1: { // Problem
+  3: { // Problem
     fillLevel: 20,
     isSteaming: false,
     isWriting: false,
@@ -30,7 +56,7 @@ const SECTION_CUP_STATES: Record<number, CupState> = {
     tilt: 0,
     isShaking: false
   },
-  2: { // Demographics
+  4: { // Demographics
     fillLevel: 50,
     isSteaming: true,
     isWriting: false,
@@ -43,7 +69,7 @@ const SECTION_CUP_STATES: Record<number, CupState> = {
     tilt: 0,
     isShaking: false
   },
-  3: { // Behavioral
+  5: { // Behavioral
     fillLevel: 70,
     isSteaming: true,
     isWriting: true,
@@ -56,7 +82,7 @@ const SECTION_CUP_STATES: Record<number, CupState> = {
     tilt: 0,
     isShaking: false
   },
-  4: { // Ordering
+  6: { // Ordering
     fillLevel: 100,
     isSteaming: true,
     isWriting: true,
@@ -69,7 +95,7 @@ const SECTION_CUP_STATES: Record<number, CupState> = {
     tilt: 0,
     isShaking: true
   },
-  5: { // Insights
+  7: { // Insights
     fillLevel: 100,
     isSteaming: false,
     isWriting: false,
@@ -82,7 +108,7 @@ const SECTION_CUP_STATES: Record<number, CupState> = {
     tilt: -5,
     isShaking: true
   },
-  6: { // Recommendations
+  8: { // Recommendations
     fillLevel: 100,
     isSteaming: false,
     isWriting: false,
@@ -95,7 +121,7 @@ const SECTION_CUP_STATES: Record<number, CupState> = {
     tilt: 0,
     isShaking: false
   },
-  7: { // Closing
+  9: { // Closing
     fillLevel: 100,
     isSteaming: true,
     isWriting: false,
@@ -105,6 +131,19 @@ const SECTION_CUP_STATES: Record<number, CupState> = {
     isOverflowing: false,
     isGlowing: true,
     glowColor: '#00a862',
+    tilt: 0,
+    isShaking: false
+  },
+  10: { // Mosaic Ending
+    fillLevel: 100,
+    isSteaming: true,
+    isWriting: false,
+    writeText: '',
+    crackLevel: 0,
+    isHealing: false,
+    isOverflowing: false,
+    isGlowing: true,
+    glowColor: '#00d084',
     tilt: 0,
     isShaking: false
   }

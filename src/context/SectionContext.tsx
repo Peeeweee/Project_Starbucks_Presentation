@@ -19,7 +19,7 @@ export const SectionProvider = ({ children }: { children: ReactNode }) => {
   const [currentSection, setCurrentSection] = useState(0);
   const [cupState, setCupState] = useState<CupState | null>(null);
   const [healingProgress, setHealingProgress] = useState(0);
-  const totalSections = 8; // Opening, Problem, Demo, Behavioral, Ordering, Insights, Recs, Closing
+  const totalSections = 11; // Blank, Sunrise, Opening, Problem, Demo, Behavioral, Ordering, Insights, Recs, Closing, Mosaic
 
   const nextSection = () => {
     setCurrentSection((prev) => Math.min(prev + 1, totalSections - 1));

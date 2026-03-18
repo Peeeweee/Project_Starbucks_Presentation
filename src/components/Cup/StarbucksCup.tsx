@@ -1,9 +1,11 @@
-import { motion, AnimatePresence, useAnimation, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useAnimation, useReducedMotion, animate } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
 import type { CupProps } from './cup.types';
 
 export const StarbucksCup = ({ state, size = 280, onHealComplete, currentSection }: CupProps) => {
   const [hasRotated, setHasRotated] = useState(false);
+  const [crumple, setCrumple] = useState(0);
+  const crumpleRef = useRef(0);
   const prevSectionRef = useRef(currentSection);
   const writingControls = useAnimation();
   const rotationControls = useAnimation();
@@ -12,7 +14,21 @@ export const StarbucksCup = ({ state, size = 280, onHealComplete, currentSection
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
-    if (currentSection === 0) {
+    const controls = animate(crumpleRef.current, currentSection === 8 ? 80 : 0, {
+      duration: 1.2,
+      ease: [0.65, 0, 0.35, 1],
+      onUpdate: (val) => {
+        crumpleRef.current = val;
+        setCrumple(val);
+      }
+    });
+    return controls.stop;
+  }, [currentSection]);
+
+  const shadowIntensity = (crumple / 80) * 1.5;
+
+  useEffect(() => {
+    if (currentSection === 1) {
       if (shouldReduceMotion) { introControls.set({ scale: 1, opacity: 1, y: 0 }); glowControls.set({ opacity: 0.15 }); return; }
       const run = async () => {
         await new Promise(r => setTimeout(r, 450));
@@ -25,14 +41,14 @@ export const StarbucksCup = ({ state, size = 280, onHealComplete, currentSection
         glowControls.start({ opacity: 0.2, transition: { duration: 2.5 } });
       };
       run();
-    } else {
+    } else if ((currentSection || 0) > 1) {
       introControls.set({ scale: 1, opacity: 1, y: 0 });
       glowControls.set({ opacity: state.isGlowing ? 0.4 : 0.1 });
     }
   }, [currentSection, introControls, glowControls, state.isGlowing, shouldReduceMotion]);
 
   useEffect(() => {
-    if (prevSectionRef.current === 2 && currentSection === 3 && !hasRotated) {
+    if (prevSectionRef.current === 4 && currentSection === 5 && !hasRotated) {
       if (shouldReduceMotion) { setHasRotated(true); return; }
       rotationControls.start({ rotate: 360, transition: { duration: 1.8, ease: [0.65, 0, 0.35, 1] } })
         .then(() => setHasRotated(true));
@@ -43,7 +59,7 @@ export const StarbucksCup = ({ state, size = 280, onHealComplete, currentSection
   useEffect(() => {
     if (state.isWriting) {
       if (shouldReduceMotion) { writingControls.set({ opacity: 1, strokeDashoffset: 0 }); return; }
-      if (currentSection === 3 && !hasRotated) return;
+      if (currentSection === 5 && !hasRotated) return;
       writingControls.start({
         strokeDashoffset: 0, opacity: 1,
         transition: { strokeDashoffset: { duration: 1.5, ease: "linear" }, opacity: { delay: 1.5, duration: 0.3 } }
@@ -94,7 +110,7 @@ export const StarbucksCup = ({ state, size = 280, onHealComplete, currentSection
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', zIndex: 10, overflow: 'visible' }}>
       <motion.div
         animate={introControls}
-        initial={currentSection === 0 ? { scale: 0.05, opacity: 0 } : { scale: 1, opacity: 1 }}
+        initial={currentSection === 1 ? { scale: 0.05, opacity: 0 } : (currentSection === 0 ? { opacity: 0 } : { scale: 1, opacity: 1 })}
         style={{ width: size * (W/200), height: size * (H/200), willChange: 'transform, opacity', position: 'relative' }}
       >
         {/* ATMOSPHERIC GLOW */}
@@ -138,10 +154,34 @@ export const StarbucksCup = ({ state, size = 280, onHealComplete, currentSection
                 <stop offset="100%" stopColor="#00a862" />
               </linearGradient>
               <clipPath id="cupClip"><path d={bodyPath} /></clipPath>
+              <filter id="crumpleFilter" x="-20%" y="-20%" width="140%" height="140%" colorInterpolationFilters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise" />
+                <feDisplacementMap 
+                  in="SourceGraphic" 
+                  in2="noise" 
+                  scale={crumple} 
+                  xChannelSelector="R" 
+                  yChannelSelector="G" 
+                  result="displaced"
+                />
+                <feColorMatrix 
+                  type="matrix" 
+                  in="noise" 
+                  result="shadows" 
+                  values={`
+                    0.8 0 0 0 0
+                    0.8 0 0 0 0
+                    0.8 0 0 0 0
+                    0 0 0 ${shadowIntensity} 0
+                  `} 
+                />
+                <feComposite operator="in" in="shadows" in2="displaced" result="maskedShadows" />
+                <feBlend mode="multiply" in="displaced" in2="maskedShadows" />
+              </filter>
             </defs>
 
             {/* LIQUID FILL */}
-            <g clipPath="url(#cupClip)">
+            <g clipPath="url(#cupClip)" filter="url(#crumpleFilter)">
               <motion.rect
                 x={0} y={bodyBotY} width={W}
                 fill="url(#liquidGrad)"
@@ -152,41 +192,43 @@ export const StarbucksCup = ({ state, size = 280, onHealComplete, currentSection
             </g>
 
             {/* BODY */}
-            <path d={bodyPath} fill="url(#cupGrad)" opacity="0.95" />
-            <path d={sleevePath} fill="url(#sleeveGrad)" />
-            
-            {/* LOGO */}
-            <g transform={`translate(${cx}, ${(sleeveTop + sleeveBotY) / 2})`}>
-              <circle r="28" fill="#00a862" />
-              <circle r="26" fill="none" stroke="white" strokeWidth="1" opacity="0.5" />
-              <ellipse cx="0" cy="-6" rx="6" ry="7" fill="white" />
-              <path d="M-8,-1 Q-10,10 -15,14 Q0,10 15,14 Q10,10 8,-1 Z" fill="white" />
+            <g filter="url(#crumpleFilter)">
+              <path d={bodyPath} fill="url(#cupGrad)" opacity="0.95" />
+              <path d={sleevePath} fill="url(#sleeveGrad)" />
+              
+              {/* LOGO */}
+              <g transform={`translate(${cx}, ${(sleeveTop + sleeveBotY) / 2})`}>
+                <circle r="28" fill="#00a862" />
+                <circle r="26" fill="none" stroke="white" strokeWidth="1" opacity="0.5" />
+                <ellipse cx="0" cy="-6" rx="6" ry="7" fill="white" />
+                <path d="M-8,-1 Q-10,10 -15,14 Q0,10 15,14 Q10,10 8,-1 Z" fill="white" />
+              </g>
+
+              {/* BRANDING TEXT */}
+              <motion.text 
+                x={cx} 
+                y={sleeveTop - 16} 
+                textAnchor="middle" 
+                fontSize="8.5" 
+                fontWeight="900" 
+                fontFamily="'Montserrat', sans-serif" 
+                fill="white" 
+                letterSpacing="3.5" 
+                animate={{
+                  opacity: state.isGlowing ? [0.5, 0.9, 0.5] : 0.6,
+                  filter: state.isGlowing 
+                    ? ['drop-shadow(0px 0px 2px rgba(255,255,255,0.2))', 'drop-shadow(0px 0px 8px rgba(255,255,255,0.6))', 'drop-shadow(0px 0px 2px rgba(255,255,255,0.2))']
+                    : 'drop-shadow(0px 0px 1px rgba(255,255,255,0.1))'
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              >
+                STARBUCKS
+              </motion.text>
+
+              {/* LID & STRAW */}
+              <path d={lidPath} fill="url(#lidGrad)" />
+              <path d={strawPath} fill="#00704a" />
             </g>
-
-            {/* BRANDING TEXT */}
-            <motion.text 
-              x={cx} 
-              y={sleeveTop - 16} 
-              textAnchor="middle" 
-              fontSize="8.5" 
-              fontWeight="900" 
-              fontFamily="'Montserrat', sans-serif" 
-              fill="white" 
-              letterSpacing="3.5" 
-              animate={{
-                opacity: state.isGlowing ? [0.5, 0.9, 0.5] : 0.6,
-                filter: state.isGlowing 
-                  ? ['drop-shadow(0px 0px 2px rgba(255,255,255,0.2))', 'drop-shadow(0px 0px 8px rgba(255,255,255,0.6))', 'drop-shadow(0px 0px 2px rgba(255,255,255,0.2))']
-                  : 'drop-shadow(0px 0px 1px rgba(255,255,255,0.1))'
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            >
-              STARBUCKS
-            </motion.text>
-
-            {/* LID & STRAW */}
-            <path d={lidPath} fill="url(#lidGrad)" />
-            <path d={strawPath} fill="#00704a" />
 
             {/* THE "RECEIPT" STICKER (Formatted & Centered) */}
             <motion.g animate={writingControls} initial={{ opacity: 0 }}>

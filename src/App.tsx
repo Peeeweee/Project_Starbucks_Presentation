@@ -1,9 +1,12 @@
-import { useEffect } from 'react';
-import { MotionConfig, motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { motion, MotionConfig } from 'framer-motion';
 import { SectionProvider, useSection } from './context/SectionContext';
 import { CupController } from './components/Cup/CupController';
+import { BlankIntro } from './components/sections/BlankIntro';
+import { SunriseIntro } from './components/sections/SunriseIntro';
 import { Opening } from './components/sections/Opening';
 import { ProblemSection } from './components/sections/ProblemSection';
+import { MosaicEnding } from './components/sections/MosaicEnding';
 import { DemographicsSection } from './components/sections/DemographicsSection';
 import { BehavioralSection } from './components/sections/BehavioralSection';
 import { OrderingSection } from './components/sections/OrderingSection';
@@ -13,6 +16,7 @@ import { ClosingSection } from './components/sections/ClosingSection';
 import { SectionDots } from './components/ui/SectionDots';
 import { PresenterTag } from './components/ui/PresenterTag';
 import { Particles } from './components/ui/Particles';
+import { SunriseBackground } from './components/ui/SunriseBackground';
 
 /* ─────────────────────────────────────────────
    ROOT STYLES (inline guarantees they work)
@@ -41,51 +45,81 @@ const LAYOUT_CONFIGS: Record<number, {
   content: { x: string; y: string; width: string; textAlign: 'left' | 'center' | 'right'; justifyContent: string };
   bg: string;
 }> = {
-  0: { // Opening - Center
+  0: { // Blank Intro
+    cup: { x: '0%', y: '-10%', scale: 0, opacity: 0, rotate: 0 },
+    content: { x: '0', y: '0', width: '100%', textAlign: 'center', justifyContent: 'center' },
+    bg: 'transparent'
+  },
+  1: { // Sunrise Intro
+    cup: { x: '0%', y: '-15%', scale: 0.85, opacity: 1, rotate: 0 },
+    content: { x: '0', y: '0', width: '100%', textAlign: 'center', justifyContent: 'center' },
+    bg: 'transparent'
+  },
+  2: { // Opening - Center
     cup: { x: '0%', y: '-26%', scale: 0.45, opacity: 1, rotate: 0 },
     content: { x: '0', y: '16vh', width: '90%', textAlign: 'center', justifyContent: 'center' },
     bg: 'radial-gradient(circle at 50% 50%, #1a1a1a 0%, #080808 100%)'
   },
-  1: { // Problem - Left
+  3: { // Problem - Left
     cup: { x: '25%', y: '0%', scale: 0.72, opacity: 1, rotate: 0 },
     content: { x: '0', y: '0', width: '50%', textAlign: 'left', justifyContent: 'flex-start' },
     bg: 'linear-gradient(135deg, #0d0d0d 0%, #151515 100%)'
   },
-  2: { // Demographics - Right
+  4: { // Demographics - Right
     cup: { x: '-25%', y: '0%', scale: 0.72, opacity: 1, rotate: -3 },
     content: { x: '0', y: '0', width: '50%', textAlign: 'right', justifyContent: 'flex-end' },
     bg: 'linear-gradient(225deg, #0d1210 0%, #0d0d0d 100%)'
   },
-  3: { // Behavioral - Left
+  5: { // Behavioral - Left
     cup: { x: '25%', y: '0%', scale: 0.72, opacity: 1, rotate: 2 },
     content: { x: '0', y: '0', width: '50%', textAlign: 'left', justifyContent: 'flex-start' },
     bg: 'radial-gradient(circle at 50% 80%, #162620 0%, #080808 100%)'
   },
-  4: { // Ordering - Right
+  6: { // Ordering - Right
     cup: { x: '-25%', y: '0%', scale: 0.72, opacity: 1, rotate: 4 },
     content: { x: '0', y: '0', width: '50%', textAlign: 'right', justifyContent: 'flex-end' },
     bg: 'linear-gradient(135deg, #0d0d0d 0%, #121815 100%)'
   },
-  5: { // Insights - Left
+  7: { // Insights - Left
     cup: { x: '25%', y: '0%', scale: 0.70, opacity: 1, rotate: -2 },
     content: { x: '0', y: '0', width: '50%', textAlign: 'left', justifyContent: 'flex-start' },
     bg: 'linear-gradient(225deg, #121212 0%, #0d0d0d 100%)'
   },
-  6: { // Recommendations - Unique Grid Layout
+  8: { // Recommendations - Unique Grid Layout
     cup: { x: '26%', y: '0%', scale: 0.70, opacity: 1, rotate: 4 },
     content: { x: '0', y: '0', width: '55%', textAlign: 'left', justifyContent: 'flex-start' },
     bg: 'radial-gradient(circle at 75% 50%, #1e3932 0%, #0a0f0d 100%)'
   },
-  7: { // Closing - Cinematic Typist Stage
+  9: { // Closing - Cinematic Typist Stage
     cup: { x: '35%', y: '5%', scale: 1.1, opacity: 0.15, rotate: -8 },
     content: { x: '0', y: '0', width: '75%', textAlign: 'left', justifyContent: 'flex-start' },
     bg: 'radial-gradient(circle at 80% 50%, #151005 0%, #050505 100%)'
+  },
+  10: { // Mosaic Ending — cup dead center, full dark canvas
+    cup: { x: '0%', y: '-5%', scale: 0.75, opacity: 1, rotate: 0 },
+    content: { x: '0', y: '0', width: '100%', textAlign: 'center', justifyContent: 'center' },
+    bg: '#020304'
   }
 };
 
 const AppContent = () => {
   const { currentSection, totalSections, nextSection, prevSection } = useSection();
-  const activeLayout = LAYOUT_CONFIGS[currentSection] || LAYOUT_CONFIGS[1];
+  const [mosaicRevealed, setMosaicRevealed] = useState(false);
+
+  // Build the effective layout — override cup on mosaic reveal
+  const baseLayout = LAYOUT_CONFIGS[currentSection] || LAYOUT_CONFIGS[1];
+  const activeLayout = (currentSection === 10 && mosaicRevealed)
+    ? { 
+        ...baseLayout, 
+        cup: { x: '0%', y: '-5%', scale: 2.2, opacity: 1, rotate: 0 },
+        bg: '#00a862'  // Starbucks green — iconic product-shot background
+      }
+    : baseLayout;
+
+  // Reset mosaic reveal when leaving slide 10
+  useEffect(() => {
+    if (currentSection !== 10) setMosaicRevealed(false);
+  }, [currentSection]);
 
   // Debounced wheel navigation
   useEffect(() => {
@@ -107,6 +141,9 @@ const AppContent = () => {
       animate={{ background: activeLayout.bg }}
       transition={{ duration: 1.5, ease: [0.65, 0, 0.35, 1] }}
     >
+      {/* ── Fixed Global Backgrounds ── */}
+      <SunriseBackground />
+      
       {/* ── Fixed UI chrome ── */}
       <Particles />
       <SectionDots />
@@ -130,7 +167,10 @@ const AppContent = () => {
           opacity: activeLayout.cup.opacity,
           rotate: activeLayout.cup.rotate ?? 0
         }}
-        transition={{ duration: 1.4, ease: [0.65, 0, 0.35, 1] }}
+        transition={{ 
+          duration: mosaicRevealed && currentSection === 10 ? 2.4 : 1.4,
+          ease: mosaicRevealed && currentSection === 10 ? [0.22, 1, 0.36, 1] : [0.65, 0, 0.35, 1]
+        }}
         style={{
           position: 'fixed',
           inset: 0,
@@ -143,8 +183,8 @@ const AppContent = () => {
         }}
       >
         <motion.div
-          animate={{ y: [0, -12, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ y: mosaicRevealed && currentSection === 10 ? 0 : [0, -12, 0] }}
+          transition={{ duration: 5, repeat: mosaicRevealed && currentSection === 10 ? 0 : Infinity, ease: "easeInOut" }}
         >
           <CupController />
         </motion.div>
@@ -192,14 +232,17 @@ const AppContent = () => {
         }}
       >
         {[
-          <Opening index={0} />,
-          <ProblemSection index={1} />,
-          <DemographicsSection index={2} />,
-          <BehavioralSection index={3} />,
-          <OrderingSection index={4} />,
-          <InsightsSection index={5} />,
-          <RecommendationsSection index={6} />,
-          <ClosingSection index={7} />
+          <BlankIntro key="0" index={0} />,
+          <SunriseIntro key="1" index={1} />,
+          <Opening key="2" index={2} />,
+          <ProblemSection key="3" index={3} />,
+          <DemographicsSection key="4" index={4} />,
+          <BehavioralSection key="5" index={5} />,
+          <OrderingSection key="6" index={6} />,
+          <InsightsSection key="7" index={7} />,
+          <RecommendationsSection key="8" index={8} />,
+          <ClosingSection key="9" index={9} />,
+          <MosaicEnding key="10" index={10} onReveal={() => setMosaicRevealed(true)} />
         ].map((child, i) => {
           const cfg = LAYOUT_CONFIGS[i] || LAYOUT_CONFIGS[1];
           return (
