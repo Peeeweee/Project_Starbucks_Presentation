@@ -236,7 +236,7 @@ const AppContent = () => {
           }}
         >
           <motion.a
-            href="https://project-starbucks-dashboard-f2fs-pgydou5xu.vercel.app"
+            href="https://project-starbucks-dashboard.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.2 }}
