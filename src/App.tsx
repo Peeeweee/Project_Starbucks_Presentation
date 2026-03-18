@@ -215,6 +215,54 @@ const AppContent = () => {
           </button>
         ))}
       </div>
+      
+      {/* ── LOYALTY REDIRECT (Slideshow End) ── */}
+      {(currentSection === 10 && mosaicRevealed) && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1, delay: 1, ease: "easeOut" }}
+          style={{
+            position: 'fixed',
+            bottom: '12vh',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 8,
+            pointerEvents: 'auto'
+          }}
+        >
+          <motion.a
+            href="https://project-starbucks-dashboard-f2fs-pgydou5xu.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.2 }}
+            style={{
+              textDecoration: 'none',
+              fontSize: '4.5rem',
+              cursor: 'pointer',
+              filter: 'drop-shadow(0 0 30px rgba(0,0,0,0.8))',
+              lineHeight: 1
+            }}
+          >
+            💚
+          </motion.a>
+          <span style={{
+            color: 'white',
+            fontSize: 10,
+            letterSpacing: '0.4em',
+            textTransform: 'uppercase',
+            fontWeight: 800,
+            textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+            opacity: 0.9
+          }}>
+            Live Visualization
+          </span>
+        </motion.div>
+      )}
 
       {/* ── Slide stack ── */}
       <motion.div 
