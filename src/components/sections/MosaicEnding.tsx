@@ -157,6 +157,54 @@ export const MosaicEnding = ({ index, onReveal }: { index: number; onReveal: () 
         })}
       </div>
 
+      {/* Floating 💚 Link for Live Visualization */}
+      {phase === 'done' && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
+          style={{
+            position: 'absolute',
+            bottom: '10vh',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 200,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '12px',
+            pointerEvents: 'auto'
+          }}
+        >
+          <motion.a
+            href="https://project-starbucks-dashboard-f2fs-pgydou5xu.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.25, rotate: [0, -10, 10, 0] }}
+            style={{
+              textDecoration: 'none',
+              fontSize: '48px',
+              cursor: 'pointer',
+              filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))',
+              display: 'block'
+            }}
+            title="View Live Visualization"
+          >
+            💚
+          </motion.a>
+          <span style={{
+            color: 'rgba(255,255,255,0.7)',
+            fontSize: '11px',
+            fontWeight: 700,
+            letterSpacing: '0.3em',
+            textTransform: 'uppercase',
+            fontFamily: "'Inter', sans-serif"
+          }}>
+            Live Visualization
+          </span>
+        </motion.div>
+      )}
+
     </div>
   );
 };
