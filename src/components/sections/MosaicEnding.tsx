@@ -67,11 +67,11 @@ export const MosaicEnding = ({ index, onReveal }: { index: number; onReveal: () 
     });
   }, []);
 
-  // Reset on slide entry + trigger rush after 2.5s
+  // Reset on slide entry + trigger rush after 7s
   useEffect(() => {
     if (isActive) {
       setPhase('idle');
-      const t = setTimeout(() => setPhase('rush'), 2500);
+      const t = setTimeout(() => setPhase('rush'), 7000);
       return () => clearTimeout(t);
     }
   }, [isActive]);
